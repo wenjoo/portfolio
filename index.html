@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>King Wen Joo — Portfolio</title>
+<meta name="description" content="Frontend-focused portfolio of King Wen Joo." />
+
+<style>
+/* ================= THEME TOKENS ================= */
+:root{
+  --bg: #0a0b11;
+  --surface: rgba(255,255,255,0.04);
+  --text: #e9ecf5;
+  --muted:#9aa4bd;
+  --border: rgba(255,255,255,0.12);
+  --brand: #7c9cff;
+  --brand-2:#b77bff;
+  --glow: 0 8px 32px rgba(124,156,255,.25);
+  --ring: 0 0 0 3px rgba(124,156,255,.35);
+}
+:root[data-theme="light"]{
+  --bg:#f6f7fb;
+  --surface: rgba(0,0,0,0.03);
+  --text:#101320;
+  --muted:#5a647c;
+  --border: rgba(0,0,0,0.12);
+  --brand:#3557ff;
+  --brand-2:#9b5cff;
+  --glow: 0 8px 32px rgba(53,87,255,.18);
+  --ring: 0 0 0 3px rgba(53,87,255,.25);
+}
+
+/* Respect system preference on first load */
+@media (prefers-color-scheme: light){
+  :root:not([data-theme]){
+    --bg:#f6f7fb; --surface: rgba(0,0,0,0.03); --text:#101320; --muted:#5a647c;
+    --border: rgba(0,0,0,0.12); --brand:#3557ff; --brand-2:#9b5cff;
+    --glow: 0 8px 32px rgba(53,87,255,.18); --ring: 0 0 0 3px rgba(53,87,255,.25);
+  }
+}
+
+/* ================= BASE ================= */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; color:var(--text); background:var(--bg);
+  font: 16px/1.6 ui-sans-serif, system-ui, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  letter-spacing:.2px; overflow-x:hidden;
+}
+
+/* Aurora animated background */
+.bg-aurora{
+  position:fixed; inset:-20vh -20vw; z-index:-2; filter: blur(40px);
+  background:
+    radial-gradient(40vw 40vh at 15% 15%, #5a8cff30 0 60%, transparent 70%),
+    radial-gradient(50vw 40vh at 90% 10%, #9b5cff26 0 60%, transparent 70%),
+    radial-gradient(40vw 40vh at 10% 95%, #22d3ee26 0 60%, transparent 70%),
+    radial-gradient(40vw 40vh at 95% 85%, #f59e0b26 0 60%, transparent 70%);
+  animation: drift 18s ease-in-out infinite alternate;
+}
+@keyframes drift{
+  0%{transform:translate3d(0,0,0) scale(1)}
+  100%{transform:translate3d(2vw,-1vh,0) scale(1.05)}
+}
+
+/* Cursor blob (mix-blend for neon effect) */
+.cursor {
+  position: fixed; width: 26vmin; height: 26vmin; border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, var(--brand), var(--brand-2));
+  opacity:.18; pointer-events:none; mix-blend-mode: screen; filter: blur(20px);
+  transform: translate(-50%,-50%); z-index:-1;
+}
+
+/* Layout */
+.container{width:min(1100px,92%); margin:0 auto}
+header{
+  position:sticky; top:0; backdrop-filter: blur(8px);
+  background: color-mix(in oklab, var(--bg) 82%, transparent);
+  border-bottom:1px solid var(--border); z-index:20;
+}
+.nav{display:flex; align-items:center; justify-content:space-between; padding:12px 0}
+.brand{display:flex; align-items:center; gap:10px; font-weight:700}
+.brand .dot{width:10px;height:10px;border-radius:50%;
+  background: radial-gradient(circle at 30% 30%, var(--brand), var(--brand-2));
+  box-shadow:0 0 16px color-mix(in oklab, var(--brand) 70%, transparent);
+}
+.nav a{color:var(--text); text-decoration:none; padding:6px 10px; border-radius:10px}
+.nav a:hover{text-decoration:underline}
+.btn{
+  display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px;
+  border:1px solid var(--border); background: var(--surface); color:var(--text); box-shadow:var(--glow);
+}
+.btn.primary{
+  background: linear-gradient(125deg, var(--brand), var(--brand-2));
+  color:#fff; border-color:transparent; text-decoration:none;
+}
+.btn:focus-visible{outline:none; box-shadow: var(--ring)}
+
+/* Hero */
+.hero{padding:56px 0 28px}
+.kv{color:var(--muted); margin:0 0 6px}
+h1{
+  font-size: clamp(28px, 5vw, 48px); line-height:1.1; margin:.2rem 0 1rem;
+  background: linear-gradient(90deg, var(--brand), var(--brand-2));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.sub{color:var(--muted); max-width:68ch}
+.tags{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px}
+.tag{
+  font-size:13px; padding:6px 10px; border-radius:999px; color:var(--muted);
+  border:1px solid var(--border); background: color-mix(in oklab, var(--surface) 85%, transparent);
+}
+
+/* Sections */
+section{padding:30px 0}
+section h2{font-size:22px; letter-spacing:.4px; margin:0 0 14px; position:relative}
+section h2::after{
+  content:""; position:absolute; left:0; bottom:-6px; width:64px; height:3px;
+  background: linear-gradient(90deg, var(--brand), var(--brand-2));
+  border-radius:3px; opacity:.7;
+}
+
+/* Cards (glass + fancy border) */
+.grid{display:grid; gap:16px; grid-template-columns: repeat(12, 1fr)}
+.card{
+  grid-column: span 12; border-radius:16px; padding:18px;
+  position:relative; background: var(--surface); border:1px solid var(--border);
+  backdrop-filter: blur(8px);
+  --b: conic-gradient(from 180deg at 50% 50%, var(--brand), transparent 25% 75%, var(--brand-2));
+}
+.card::before{
+  content:""; position:absolute; inset:0; border-radius:inherit; padding:1px;
+  background: var(--b); -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude; opacity:.35;
+}
+.card h3{margin:0 0 6px; font-size:18px}
+.meta{color:var(--muted); font-size:14px; margin-bottom:6px}
+.card .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
+
+/* 3D tilt hover */
+.tilt{transform-style:preserve-3d; transition: transform .18s ease, box-shadow .18s ease}
+.tilt:hover{box-shadow: 0 12px 40px rgba(0,0,0,.25)}
+.tilt .lift{transform: translateZ(24px)}
+@media (min-width: 760px){
+  .project.card{grid-column: span 6}
+}
+
+/* Lists */
+.list{display:grid; gap:8px}
+.list li{margin-left:1.1rem}
+
+/* Footer */
+footer{border-top:1px solid var(--border); padding:28px 0 60px; color:var(--muted); font-size:14px}
+
+/* Scroll reveal */
+.reveal{opacity:0; transform: translateY(12px); transition: opacity .5s ease, transform .5s ease}
+.reveal.show{opacity:1; transform: none}
+
+/* Motion reduce */
+@media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important} }
+</style>
+</head>
+<body>
+<div class="bg-aurora" aria-hidden="true"></div>
+<div class="cursor" id="cursor" aria-hidden="true"></div>
+
+<header>
+  <div class="container nav" role="navigation" aria-label="Main">
+    <div class="brand">
+      <span class="dot" aria-hidden="true"></span>
+      <span>King Wen Joo</span>
+    </div>
+    <nav class="links" aria-label="Sections" style="display:flex; gap:12px; align-items:center">
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#experience">Experience</a>
+      <button id="theme-toggle" class="btn" type="button" aria-label="Toggle color theme">Toggle Theme</button>
+      <a class="btn primary" href="mailto:wenjook@gmail.com">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <!-- HERO -->
+  <section class="hero reveal" id="about">
+    <p class="kv">Frontend • UI Engineering • Monash University Malaysia</p>
+    <h1>Building clean, accessible, and performant interfaces.</h1>
+    <p class="sub">
+      Final-year Computer Science student focusing on modern frontend development.
+      Experienced with JavaScript/TypeScript, React, REST APIs, and data-driven UIs.
+    </p>
+    <p>Available for internship: <strong>15 Nov 2025 – 27 Feb 2026</strong>.</p>
+    <div class="tags" aria-label="Key skills">
+      <span class="tag">JavaScript</span><span class="tag">TypeScript</span><span class="tag">React</span>
+      <span class="tag">HTML/CSS</span><span class="tag">Figma</span><span class="tag">Git/GitHub</span>
+    </div>
+    <div class="links" style="margin-top:14px; flex-wrap:wrap; gap:10px">
+      <a class="btn" href="https://linkedin.com/in/wenjook" target="_blank" rel="noreferrer">LinkedIn</a>
+      <a class="btn" href="https://github.com/wenjook" target="_blank" rel="noreferrer">GitHub</a>
+      <a class="btn" href="./WenJoo_Resume.pdf" target="_blank" rel="noreferrer">Download Resume (PDF)</a>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <h2>Projects</h2>
+    <div class="grid">
+      <article class="card project tilt reveal">
+        <h3 class="lift">HepaSim — 3D Liver Cancer Simulation</h3>
+        <p class="meta">JavaScript, HTML, CSS, Python • Aug 2025 – Present</p>
+        <p>Interactive 3D visualization for liver/tumor STL models with simulation controls,
+          treatment scenarios, charts, and exports. Focus on clear UI and accessible controls.</p>
+        <div class="actions">
+          <a class="btn" href="#" aria-disabled="true">Live Demo</a>
+          <a class="btn" href="#" aria-disabled="true">Source</a>
+          <a class="btn" href="#" aria-disabled="true">Figma</a>
+        </div>
+      </article>
+
+      <article class="card project tilt reveal">
+        <h3 class="lift">NutriTrack — Clinical Diet Tracker</h3>
+        <p class="meta">Android (Kotlin/Java), Room, REST API • Apr – May 2025</p>
+        <p>Dual views for Clinicians/Admins, Nutrition API integration for food search, and
+          AI-assisted recommendations. Emphasis on forms UX and data presentation.</p>
+        <div class="actions">
+          <a class="btn" href="#" aria-disabled="true">Case Study</a>
+          <a class="btn" href="#" aria-disabled="true">Source</a>
+        </div>
+      </article>
+
+      <article class="card project tilt reveal">
+        <h3 class="lift">Roguelike Text Adventure</h3>
+        <p class="meta">Java, OOP, SOLID, Git • Apr – Jun 2025</p>
+        <p>Text-based game with clean architecture and UML documentation. Built with a
+          focus on readability, testing, and CLI UX.</p>
+        <div class="actions">
+          <a class="btn" href="#" aria-disabled="true">Source</a>
+        </div>
+      </article>
+
+      <article class="card project tilt reveal">
+        <h3 class="lift">Flappy Birb — FRP Game with RxJS</h3>
+        <p class="meta">TypeScript, RxJS, HTML, CSS • Aug 2025</p>
+        <p>
+            Flappy Bird–style game implemented using <strong>Functional Reactive Programming (FRP)</strong>.
+            All time-varying behavior modeled as streams (input, frame clock, spawns, pause), a single
+            <strong>pure reducer</strong> updates an immutable state each tick, and rendering reflects state exactly.
+        </p>
+        <div class="actions">
+            <a class="btn" href="https://wenjook.github.io/flappybirb" target="_blank" rel="noreferrer">Live Demo</a>
+            <a class="btn" href="https://github.com/wenjoo/flappybird" target="_blank" rel="noreferrer">Source</a>
+        </div>
+        </article>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <h2>Skills</h2>
+    <div class="grid">
+      <div class="card reveal" style="grid-column: span 12;">
+        <ul class="list">
+          <li><strong>Frontend:</strong> JavaScript, TypeScript, HTML, CSS, React</li>
+          <li><strong>Tools:</strong> Git, GitHub, VS Code, Figma, Android Studio</li>
+          <li><strong>Other:</strong> Python, Haskell</li>
+          <li><strong>Languages:</strong> English, Mandarin, Malay</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <h2>Experience</h2>
+    <div class="grid">
+      <div class="card reveal" style="grid-column: span 12;">
+        <h3>Service Crew — We Kitchen</h3>
+        <p class="meta">Nov 2022 – Jun 2024</p>
+        <ul class="list">
+          <li>Trained new staff; improved onboarding efficiency and team coordination</li>
+          <li>Balanced shifts with studies; strengthened time management and communication</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">© <span id="year"></span> King Wen Joo </div>
+</footer>
+
+<script>
+/* ===== Year ===== */
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* ===== Theme toggle===== */
+const root = document.documentElement;
+const themeKey = 'kwj-theme';
+const saved = localStorage.getItem(themeKey);
+if (saved === 'light' || saved === 'dark') root.setAttribute('data-theme', saved);
+function setTheme(next){ root.setAttribute('data-theme', next); localStorage.setItem(themeKey, next); }
+document.getElementById('theme-toggle').addEventListener('click', ()=>{
+  const current = root.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+  setTheme(current === 'light' ? 'dark' : 'light');
+});
+
+/* ===== Cursor blob follow ===== */
+const blob = document.getElementById('cursor');
+let x = window.innerWidth/2, y = window.innerHeight/2, tx=x, ty=y;
+window.addEventListener('pointermove', e => { tx = e.clientX; ty = e.clientY; });
+function tick(){
+  x += (tx - x) * 0.12; y += (ty - y) * 0.12;
+  blob.style.transform = `translate(${x - blob.clientWidth/2}px, ${y - blob.clientHeight/2}px)`;
+  requestAnimationFrame(tick);
+}
+tick();
+
+/* ===== 3D tilt on cards ===== */
+const tilts = document.querySelectorAll('.tilt');
+tilts.forEach(card=>{
+  let rAF;
+  card.addEventListener('pointermove', (e)=>{
+    const rect = card.getBoundingClientRect();
+    const px = (e.clientX - rect.left)/rect.width - 0.5;
+    const py = (e.clientY - rect.top)/rect.height - 0.5;
+    cancelAnimationFrame(rAF);
+    rAF = requestAnimationFrame(()=>{
+      card.style.transform = `perspective(900px) rotateY(${px*8}deg) rotateX(${-py*8}deg) translateZ(0)`;
+    });
+  });
+  card.addEventListener('pointerleave', ()=>{ card.style.transform=''; });
+});
+
+/* ===== Scroll reveal ===== */
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(en=>{
+    if(en.isIntersecting){ en.target.classList.add('show'); io.unobserve(en.target); }
+  });
+},{rootMargin:'-10% 0px -10% 0px', threshold:0.05});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
